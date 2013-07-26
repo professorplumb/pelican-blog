@@ -1,0 +1,66 @@
+<html>
+<head>
+    <script type="text/javascript" src="//d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
+        svg .axis path, svg .axis line {
+            fill: none;
+            stroke: black;
+            shape-rendering: crispEdges;
+        }
+        svg .axis text {
+            font-family: sans-serif;
+            font-size: 11px;
+            text-anchor: middle;
+        }
+    </style>
+<head>
+<body>
+<script type="text/javascript">
+    var svg = d3.select('body').append('svg:svg'),
+            w = 500, h = 250;
+    svg.attr('width', w).attr('height', h);
+
+    var plotfunc = function(x) { return 1 + Math.sin(x); },
+            plotdata = [];
+    var lowX = 0, highX = 10, dX = 1;
+    for (var i=0; i<highX; i+= dX) {
+        plotdata.push([i, plotfunc(i)]);
+    }
+
+    var padding = 20,
+            xMax = d3.max(plotdata, function(d) { return d[0]; }),
+            yMax = d3.max(plotdata, function(d) { return d[1]; }),
+            xScale = d3.scale.linear()
+                    .domain([0, xMax])
+                    .range([padding, w - padding]),
+            yScale = d3.scale.linear()
+                    .domain([0, yMax])
+                    .range([h - padding, padding]),
+            xAxis = d3.svg.axis()
+                    .scale(xScale)
+                    .orient('bottom'),
+            yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient('left');
+
+    svg.append('svg:g')
+            .attr('class', "axis")
+            .attr('transform', "translate(0," + (h - 20) + ")")
+            .call(xAxis);
+    svg.append('svg:g')
+            .attr('class', "axis")
+            .attr('transform', "translate(20,0)")
+            .call(yAxis);
+
+    var lineFunction = d3.svg.line()
+            .x(function(d) { return xScale(d[0]); })
+            .y(function(d) { return yScale(d[1]); })
+            .interpolate('basis');
+
+    svg.append('svg:path')
+            .attr('d', lineFunction(plotdata))
+            .style('stroke', "rgb(6, 120, 155)")
+            .style('fill', "none");
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+*.pyc
+*.pid
+*.iml
+idea/
+.idea/
+output/
